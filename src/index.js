@@ -57,13 +57,7 @@ const runPhysics = (delta, world) => {
     const firstCollision = minCollision(collisions);
     const tFirst = firstCollision.time;
 
-    if(tFirst < 0){
-        console.log(firstCollision);
-        throw new Error("TFIRST < 0");
-    }
-
     if(tFirst > delta) {
-        console.log("tFirst > delta", firstCollision, delta);
         return new World(
             integrateAtoms(delta, world.atoms),
             world.walls

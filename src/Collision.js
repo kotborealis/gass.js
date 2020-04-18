@@ -160,8 +160,6 @@ const resolveCollision = (collision) => {
         const delta = collision.time;
         const a = integrateAtom(delta, collision.a);
 
-        //if(-collision.normal.dot(a.velocity) > 0) return [a];
-
         a.velocity = collision.normal.multiplyScalar(a.velocity.length());
 
         return [a];
