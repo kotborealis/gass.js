@@ -3,12 +3,21 @@
 
     </head>
     <style>
-        * { margin: 0; padding: 0; cursor: none; }
+        * { margin: 0; padding: 0; }
         body { background: #fcb215; }
+        canvas {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+        }
     </style>
     <body>
-        <canvas width="800" height="800"></canvas>
+        <canvas></canvas>
     </body>
     <script src="./Vector.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./Atom.js"></script>
+    <script src="./Wall.js"></script>
+    <script src="./Collision.js"></script>
     <script src="./index.js"></script>
 </html5>
