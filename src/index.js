@@ -92,18 +92,18 @@ const onResize = () => {
 }
 onResize();
 
-const width = 400;
-const height = 400;
+const width = window.innerWidth;
+const height = window.innerHeight;
 
 const initialBounds = [
-    new Vector(100, 100),
+    new Vector(0, 0),
     new Vector(width, height)
 ];
 
 const atomRadius = 10;
 
-const atomsCountX = 1;
-const atomsCountY = 1;
+const atomsCountX = 10;
+const atomsCountY = 10;
 
 const atoms = [];
 
@@ -114,7 +114,7 @@ for(let i = 0; i < atomsCountX; i++)
                 atomRadius*2 + initialBounds[0].x + i * width/(atomRadius*2),
                 atomRadius*2 + initialBounds[0].y + j * height/(atomRadius*2)
             ),
-            Vector.random(100, 300, 200, 200),
+            Vector.random(-10, 10, 0, 100),
         ));
 
 const walls = [
@@ -155,8 +155,8 @@ const render = (canvas, world, delta) => {
     });
 
     world.walls.forEach(wall => {
-        ctx.lineWidth = 5;
-        ctx.strokeStyle= "#0f0f0f";
+        ctx.lineWidth = 1;
+        ctx.strokeStyle= "#000";
         ctx.beginPath();
         ctx.moveTo(...wall.a.coords());
         ctx.lineTo(...wall.b.coords());

@@ -102,24 +102,7 @@ const collideAtomWall = (delta, atom, wall) => {
 
     const a = lineIntersection(w1, w2, m1, m2);
 
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = "#f100d2";
-    ctx.lineWidth = 2;
-    ctx.strokeStyle= "#d200ff";
-    ctx.beginPath();
-    ctx.moveTo(...m1.coords());
-    ctx.lineTo(...m2.coords());
-    ctx.stroke();
-
     if(!a) return null;
-
-    ctx.fillStyle = "#f0fff0";
-    ctx.lineWidth = 2;
-    ctx.strokeStyle= "#0fff0f";
-    ctx.beginPath();
-    ctx.arc(...[...a.coords(), 5, 0, 2 * Math.PI, false]);
-    ctx.fill();
-    ctx.stroke();
 
     const p1 = closestPointOnLine(w1, w2, atom.position);
 
@@ -137,9 +120,7 @@ const collideAtomWall = (delta, atom, wall) => {
 
     const time = delta / Math.abs(move.length() - pC.sub(m1).length());
 
-    const normal = m1.sub(p3).normalize();
-
-    console.log("COLLISION", time, normal );
+    const normal = atom.velocity.multiplyScalar(-1).normalize();
 
     return new Collision(
         atom,
@@ -178,6 +159,8 @@ const resolveCollision = (collision) => {
     if(collisionAtoms(collision).length === 1){
         const delta = collision.time;
         const a = integrateAtom(delta, collision.a);
+
+        //if(-collision.normal.dot(a.velocity) > 0) return [a];
 
         a.velocity = collision.normal.multiplyScalar(a.velocity.length());
 
