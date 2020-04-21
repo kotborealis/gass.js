@@ -64,15 +64,15 @@ const runPhysics = (delta, world) => {
         );
     }
 
-    const delta_ = delta - tFirst - 0.001;
+    let delta_ = Math.max(delta - tFirst - 0.0001, 0);
     const collidingAtoms = collisionAtoms(firstCollision);
     const nonCollidingAtoms = world.atoms.filter(atom => !collidingAtoms.includes(atom));
 
-    return new World(
+    return runPhysics(delta_, new World(
         [
             ...integrateAtoms(tFirst, nonCollidingAtoms),
             ...resolveCollision(firstCollision)
         ],
         world.walls
-    );
+    ));
 };

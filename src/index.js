@@ -15,16 +15,24 @@ const atomRadius = 10;
 const atomsCountX = 10;
 const atomsCountY = 10;
 
-const atoms = [];
+const atoms = [
+    //new Atom(
+    //    new Vector(
+    //        400,
+    //        400
+    //    ),
+    //    new Vector(-472.9904476582339, -593.5051018316937)
+    //)
+];
 
 for(let i = 0; i < atomsCountX; i++)
     for(let j = 0; j < atomsCountY; j++)
         atoms.push(new Atom(
             new Vector(
-                atomRadius*2 + initialBounds[0].x + i * width/(atomRadius*2),
-                atomRadius*2 + initialBounds[0].y + j * height/(atomRadius*2)
+                100 + atomRadius*2 + initialBounds[0].x + i * width/(atomRadius*2),
+                100 + atomRadius*2 + initialBounds[0].y + j * height/(atomRadius*2)
             ),
-            Vector.random(-10, 10, 0, 100),
+            Vector.random(-1000, 1000, -1000, 1000),
         ));
 
 const walls = (bounds = initialBounds) => [
@@ -60,6 +68,22 @@ const render = (canvas, world, delta) => {
         ctx.arc(...[...atom.position.coords(), atomRadius, 0, 2 * Math.PI, false]);
         ctx.fill();
         ctx.stroke();
+
+        //if(atom.position.y < 110) {
+        //    console.log(atom);
+        //    throw new Error;
+        //}
+
+        const move = atom.velocity.multiplyScalar(delta);
+        const m1 = atom.position.add(move.normalize().multiplyScalar(atomRadius));
+        const m2 = m1.add(move);
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle= "#f00";
+        ctx.beginPath();
+        ctx.moveTo(...m1.coords());
+        ctx.lineTo(...m2.coords());
+        ctx.stroke();
     });
 
     world.walls.forEach(wall => {
@@ -78,12 +102,16 @@ let time = Date.now();
 
 const update = () => {
     time = Date.now();
-    const delta = (time - lastTime)/1000;
+    //const delta = (time - lastTime)/1000;
+    const delta = 1/60;
     lastTime = time;
 
     render(canvas, world, delta);
     world = runPhysics(delta, world);
-    requestAnimationFrame(update);
+    //requestAnimationFrame(update);
+    setTimeout(update, delta * 1000);
 };
 
 update();
+
+//document.addEventListener('keypress', update);

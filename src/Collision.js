@@ -91,20 +91,40 @@ const collideAtomAtom = (delta, lh, rh) => {
  * @returns {Collision|null}
  */
 const collideAtomWall = (delta, atom, wall) => {
+    const ctx = canvas.getContext('2d');
+
     const move = atom.velocity.multiplyScalar(delta);
     const m1 = atom.position.add(move.normalize().multiplyScalar(atomRadius));
-    const m2 = m1.add(move).add(move.normalize().multiplyScalar(atomRadius));
+    const m2 = m1.add(move);
 
     const w1 = wall.a;
     const w2 = wall.b;
 
     //https://ericleong.me/research/circle-line/#moving-circle-and-static-line-segment
 
-    const a = lineIntersection(w1, w2, m1, m2);
+    let a = lineIntersection(w1, w2, m1, m2);
 
-    if(!a) return null;
+    const p1 = closestPointOnLine(w1, w2, atom.position.add(move));
 
-    const p1 = closestPointOnLine(w1, w2, atom.position);
+    if(!a && atom.position.add(move).distance(p1) > atomRadius) return null;
+
+    if(!a) a = p1;
+
+    ctx.fillStyle = "#ff0";
+    ctx.lineWidth = 2;
+    ctx.strokeStyle= "#ff0";
+    ctx.beginPath();
+    ctx.arc(...[...p1.coords(), 5, 0, 2 * Math.PI, false]);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#f0f";
+    ctx.lineWidth = 2;
+    ctx.strokeStyle= "#f0f";
+    ctx.beginPath();
+    ctx.arc(...[...a.coords(), 5, 0, 2 * Math.PI, false]);
+    ctx.fill();
+    ctx.stroke();
 
     const p2 = a.sub(
         atom.velocity
@@ -116,11 +136,9 @@ const collideAtomWall = (delta, atom, wall) => {
 
     const pC = closestPointOnLine(w1, w2, p2);
 
-    const p3 = p2.add(p1).sub(pC);
+    const time = delta / Math.abs(move.length() - a.sub(atom.position.add(move)).length());
 
-    const time = delta / Math.abs(move.length() - pC.sub(m1).length());
-
-    const normal = atom.velocity.multiplyScalar(-1).normalize();
+    const normal = pC.sub(atom.position.add(move)).normalize().multiplyScalar(-1);
 
     return new Collision(
         atom,
@@ -159,6 +177,10 @@ const resolveCollision = (collision) => {
     if(collisionAtoms(collision).length === 1){
         const delta = collision.time;
         const a = integrateAtom(delta, collision.a);
+
+        //const separatingVelocity = a.velocity.dot(collision.normal);
+
+        //if(separatingVelocity > 0) return [a];
 
         a.velocity = collision.normal.multiplyScalar(a.velocity.length());
 
