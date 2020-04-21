@@ -91,10 +91,10 @@ export const generateWorld = (width, height, atomsCount) => {
         {length: atomsCount},
         () => new Atom(
             Vector.random(
-                initialBounds[0].x + atomRadius,
-                initialBounds[1].x - atomRadius,
-                initialBounds[0].y + atomRadius,
-                initialBounds[1].y - atomRadius),
+                initialBounds[0].x + atomRadius*5,
+                initialBounds[1].x - atomRadius*5,
+                initialBounds[0].y + atomRadius*5,
+                initialBounds[1].y - atomRadius*5),
             Vector.random(-100, 100, -100, 100)
         )
     );
@@ -107,6 +107,7 @@ export const generateWorld = (width, height, atomsCount) => {
         new Wall(
             new Vector(initialBounds[1].x, initialBounds[0].y),
             new Vector(initialBounds[1].x, initialBounds[1].y),
+            //new Vector(-100, 0)
         ),
         new Wall(
             new Vector(initialBounds[1].x, initialBounds[1].y),

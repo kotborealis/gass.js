@@ -111,7 +111,7 @@ export const collideAtomWall = (delta, atom, wall) => {
 
     if(a){
         const time = delta / Math.abs(move.length() - a.sub(atom.position.add(move)).length());
-        const d = atom.velocity;
+        const d = move;
         const n = w2.sub(w1).normalize();
         const normal = d.sub(n.multiplyScalar(2*d.dot(n))).normalize().negate();
         //const normal = a.sub(next).normalize().negate();
@@ -128,8 +128,8 @@ export const collideAtomWall = (delta, atom, wall) => {
         const dst_next = next.distance(closest);
         const dst = atom.position.distance(closest);
         if(dst < atomRadius || dst_next < atomRadius) {
-            const time = 0.001;
-            const d = atom.velocity;
+            const time = 0.000001;
+            const d = move;
             const n = w2.sub(w1).normalize();
             const normal = d.sub(n.multiplyScalar(2*d.dot(n))).normalize().negate();
 
@@ -174,7 +174,7 @@ export const resolveCollision = (collision) => {
         const a = integrateAtom(delta, collision.a);
         const b = integrateWall(delta, collision.b);
 
-        const next = collision.normal.multiplyScalar(a.velocity.add(b.velocity).length());
+        const next = collision.normal.multiplyScalar(a.velocity.length()).add(b.velocity);
         const closest = closestPointOnLine(b.a, b.b, a.position);
 
         if(
