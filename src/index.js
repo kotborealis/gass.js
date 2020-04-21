@@ -70,7 +70,7 @@ const render = (canvas, world, delta) => {
         //}
 
         const move = atom.velocity.multiplyScalar(delta);
-        const m1 = atom.position.add(move.normalize().multiplyScalar(atomRadius));
+        const m1 = atom.position;
         const m2 = m1.add(move);
 
         ctx.lineWidth = 1;
@@ -98,7 +98,7 @@ let time = Date.now();
 const update = () => {
     time = Date.now();
     //const delta = (time - lastTime)/1000;
-    const delta = 1/30;
+    const delta = 1/60;
     lastTime = time;
 
     render(canvas, world, delta);

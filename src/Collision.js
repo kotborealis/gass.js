@@ -94,6 +94,7 @@ const collideAtomWall = (delta, atom, wall) => {
     const ctx = canvas.getContext('2d');
 
     const move = atom.velocity.sub(wall.velocity).multiplyScalar(delta);
+    const next = atom.position.add(move);
     const m1 = atom.position.copy();
     const m2 = m1.add(move);
 
@@ -102,54 +103,36 @@ const collideAtomWall = (delta, atom, wall) => {
 
     //https://ericleong.me/research/circle-line/#moving-circle-and-static-line-segment
 
-    let a = lineIntersection(w1, w2, m1, m2);
+    const a = lineIntersection(w1, w2, m1, m2);
 
-    const p1 = closestPointOnLine(w1, w2, atom.position.add(move));
+    if(a){
+        const time = delta / Math.abs(move.length() - a.sub(atom.position.add(move)).length());
+        const normal = atom.velocity.multiplyScalar(-1).normalize();
 
-    if(!a && atom.position.add(move).distance(p1) > atomRadius) {
-        return null;
+        return new Collision(
+            atom,
+            wall,
+            time,
+            normal
+        );
     }
+    else{
+        const closest = closestPointOnLine(w1, w2, next);
+        const dst_next = next.distance(closest);
+        const dst = atom.position.distance(closest);
+        if(dst < atomRadius || dst_next < atomRadius) {
+            const time = 0.001;
+            //const normal = atom.velocity.multiplyScalar(1).normalize();
+            const normal = atom.position.sub(closest).normalize();
 
-    if(!a) a = p1;
-
-    ctx.fillStyle = "#ff0";
-    ctx.lineWidth = 2;
-    ctx.strokeStyle= "#ff0";
-    ctx.beginPath();
-    ctx.arc(...[...p1.coords(), 5, 0, 2 * Math.PI, false]);
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.fillStyle = "#f0f";
-    ctx.lineWidth = 2;
-    ctx.strokeStyle= "#f0f";
-    ctx.beginPath();
-    ctx.arc(...[...a.coords(), 5, 0, 2 * Math.PI, false]);
-    ctx.fill();
-    ctx.stroke();
-
-    const p2 = a.sub(
-        atom.velocity
-            .multiplyScalar(atomRadius)
-            .multiplyScalar(a.multiplyVector(atom.position).length())
-            .divideScalar(atom.velocity.length())
-            .divideScalar(p1.multiplyVector(atom.position).length())
-    );
-
-    const pC = closestPointOnLine(w1, w2, p2);
-
-    const time = delta / Math.abs(move.length() - a.sub(atom.position.add(move)).length());
-
-    //const normal = pC.sub(atom.position.add(move)).normalize().multiplyScalar(1);
-    const p3 = p2.add(p1).sub(pC);
-    const normal = atom.velocity.multiplyScalar(-1).normalize();
-
-    return new Collision(
-        atom,
-        wall,
-        time,
-        normal
-    );
+            return new Collision(
+                atom,
+                wall,
+                time,
+                normal
+            );
+        }
+    }
 };
 
 /**
@@ -183,7 +166,18 @@ const resolveCollision = (collision) => {
         const a = integrateAtom(delta, collision.a);
         const b = integrateWall(delta, collision.b);
 
-        a.velocity = collision.normal.multiplyScalar(a.velocity.add(b.velocity).length());
+        const next = collision.normal.multiplyScalar(a.velocity.add(b.velocity).length());
+        const closest = closestPointOnLine(b.a, b.b, a.position);
+
+        console.log("SAS", collision, a.position.distance(closest), a.position.add(next).distance(closest));
+
+        if(
+            a.position.distance(closest)
+            >
+            a.position.add(next).distance(closest)
+        ) return [a];
+
+        a.velocity = next;
 
         return [a];
     }
