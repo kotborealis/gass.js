@@ -93,8 +93,8 @@ const collideAtomAtom = (delta, lh, rh) => {
 const collideAtomWall = (delta, atom, wall) => {
     const ctx = canvas.getContext('2d');
 
-    const move = atom.velocity.multiplyScalar(delta);
-    const m1 = atom.position.add(move.normalize().multiplyScalar(atomRadius));
+    const move = atom.velocity.sub(wall.velocity).multiplyScalar(delta);
+    const m1 = atom.position.copy();
     const m2 = m1.add(move);
 
     const w1 = wall.a;
@@ -106,7 +106,9 @@ const collideAtomWall = (delta, atom, wall) => {
 
     const p1 = closestPointOnLine(w1, w2, atom.position.add(move));
 
-    if(!a && atom.position.add(move).distance(p1) > atomRadius) return null;
+    if(!a && atom.position.add(move).distance(p1) > atomRadius) {
+        return null;
+    }
 
     if(!a) a = p1;
 
@@ -138,7 +140,9 @@ const collideAtomWall = (delta, atom, wall) => {
 
     const time = delta / Math.abs(move.length() - a.sub(atom.position.add(move)).length());
 
-    const normal = pC.sub(atom.position.add(move)).normalize().multiplyScalar(-1);
+    //const normal = pC.sub(atom.position.add(move)).normalize().multiplyScalar(1);
+    const p3 = p2.add(p1).sub(pC);
+    const normal = atom.velocity.multiplyScalar(-1).normalize();
 
     return new Collision(
         atom,
@@ -177,10 +181,6 @@ const resolveCollision = (collision) => {
     if(collisionAtoms(collision).length === 1){
         const delta = collision.time;
         const a = integrateAtom(delta, collision.a);
-
-        //const separatingVelocity = a.velocity.dot(collision.normal);
-
-        //if(separatingVelocity > 0) return [a];
 
         a.velocity = collision.normal.multiplyScalar(a.velocity.length());
 

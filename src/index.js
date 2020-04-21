@@ -16,13 +16,7 @@ const atomsCountX = 10;
 const atomsCountY = 10;
 
 const atoms = [
-    //new Atom(
-    //    new Vector(
-    //        400,
-    //        400
-    //    ),
-    //    new Vector(-472.9904476582339, -593.5051018316937)
-    //)
+
 ];
 
 for(let i = 0; i < atomsCountX; i++)
@@ -69,10 +63,10 @@ const render = (canvas, world, delta) => {
         ctx.fill();
         ctx.stroke();
 
-        //if(atom.position.y < 110) {
-        //    console.log(atom);
-        //    throw new Error;
-        //}
+        if(atom.position.y > 1352) {
+            console.log(atom);
+            throw new Error;
+        }
 
         const move = atom.velocity.multiplyScalar(delta);
         const m1 = atom.position.add(move.normalize().multiplyScalar(atomRadius));
@@ -103,7 +97,7 @@ let time = Date.now();
 const update = () => {
     time = Date.now();
     //const delta = (time - lastTime)/1000;
-    const delta = 1/60;
+    const delta = 1/30;
     lastTime = time;
 
     render(canvas, world, delta);
