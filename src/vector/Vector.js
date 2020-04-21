@@ -42,6 +42,14 @@ export class Vector {
      *
      * @returns {Vector}
      */
+    negate(){
+        return new Vector(-this.x, -this.y);
+    }
+
+    /**
+     *
+     * @returns {Vector}
+     */
     static random(lo_x, hi_x, lo_y, hi_y){
         return new Vector(Math.random() * (hi_x - lo_x) + lo_x, Math.random() * (hi_y - lo_y) + lo_y);
     }

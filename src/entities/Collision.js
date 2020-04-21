@@ -111,7 +111,10 @@ export const collideAtomWall = (delta, atom, wall) => {
 
     if(a){
         const time = delta / Math.abs(move.length() - a.sub(atom.position.add(move)).length());
-        const normal = atom.position.sub(a).normalize();
+        const d = atom.velocity;
+        const n = w2.sub(w1).normalize();
+        const normal = d.sub(n.multiplyScalar(2*d.dot(n))).normalize().negate();
+        //const normal = a.sub(next).normalize().negate();
 
         return new Collision(
             atom,
@@ -126,7 +129,9 @@ export const collideAtomWall = (delta, atom, wall) => {
         const dst = atom.position.distance(closest);
         if(dst < atomRadius || dst_next < atomRadius) {
             const time = 0.001;
-            const normal = atom.position.sub(closest).normalize();
+            const d = atom.velocity;
+            const n = w2.sub(w1).normalize();
+            const normal = d.sub(n.multiplyScalar(2*d.dot(n))).normalize().negate();
 
             return new Collision(
                 atom,
