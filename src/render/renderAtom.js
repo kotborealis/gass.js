@@ -1,12 +1,11 @@
 /**
  *
  * @param ctx
- * @param {Number} delta
  * @param {Atom} atom
  */
 import {atomRadius} from '../entities/Atom';
 
-export const renderAtom = (ctx, delta, atom) => {
+export const renderAtom = (ctx, atom) => {
     ctx.fillStyle = "#f0f0f0";
     ctx.lineWidth = 2;
     ctx.strokeStyle= "#0f0f0f";
@@ -15,7 +14,7 @@ export const renderAtom = (ctx, delta, atom) => {
     ctx.fill();
     ctx.stroke();
 
-    const move = atom.velocity.multiplyScalar(delta);
+    const move = atom.velocity;
     const m1 = atom.position;
     const m2 = m1.add(move);
 
@@ -30,7 +29,6 @@ export const renderAtom = (ctx, delta, atom) => {
 /**
  *
  * @param ctx
- * @param {Number} delta
  * @param {Atom[]} atoms
  */
-export const renderAtoms = (ctx, delta, atoms) => atoms.map(renderAtom.bind(this, ctx, delta));
+export const renderAtoms = (ctx, atoms) => atoms.map(renderAtom.bind(this, ctx));

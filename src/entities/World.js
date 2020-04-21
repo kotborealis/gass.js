@@ -25,11 +25,11 @@ export class World {
  *
  * @param {Number} delta
  * @param {World} world
- * @returns {World}
+ * @param callback
  */
-export const runPhysics = (delta, world) => {
+export const runPhysics = (delta, world, resolve) => setTimeout(() => {
     if(delta === 0) {
-        return world
+        return resolve(world);
     }
 
     const collisions_ = [];
@@ -45,34 +45,35 @@ export const runPhysics = (delta, world) => {
     const collisions = collisions_.filter(id => id);
 
     if(!collisions.length) {
-        return new World(
+        return resolve(new World(
             integrateAtoms(delta, world.atoms),
             integrateWalls(delta, world.walls)
-        );
+        ));
     }
 
     const firstCollision = minCollision(collisions);
     const tFirst = firstCollision.time;
 
     if(tFirst > delta) {
-        return new World(
+        return resolve(new World(
             integrateAtoms(delta, world.atoms),
             integrateWalls(delta, world.walls)
-        );
+        ));
     }
 
-    let delta_ = Math.max(delta - tFirst - 0.0001, 0);
+    let delta_ = Math.max(delta - tFirst - 0.001, 0);
     const collidingAtoms = collisionAtoms(firstCollision);
     const nonCollidingAtoms = world.atoms.filter(atom => !collidingAtoms.includes(atom));
 
-    return runPhysics(delta_, new World(
+    const world_ = new World(
         [
             ...integrateAtoms(tFirst, nonCollidingAtoms),
             ...resolveCollision(firstCollision)
         ],
         integrateWalls(tFirst, world.walls)
-    ));
-};
+    );
+    setTimeout(() => runPhysics(delta_, world_, resolve), 0);
+}, 0);
 
 /**
  *

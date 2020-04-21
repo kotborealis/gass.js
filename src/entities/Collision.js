@@ -75,7 +75,7 @@ export const collideAtomAtom = (delta, lh, rh) => {
 
     if(t < 0) return null;
 
-    const distUntilCollision = d - Math.sqrt(t);
+    const distUntilCollision = Math.abs(d - Math.sqrt(t));
     const time = delta * (distUntilCollision / move.length());
     const normal = center.normalize();
 

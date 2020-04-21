@@ -1,10 +1,9 @@
 /**
  *
  * @param ctx
- * @param {Number} delta
  * @param {Wall} wall
  */
-export const renderWall = (ctx, delta, wall) => {
+export const renderWall = (ctx, wall) => {
     ctx.lineWidth = 1;
     ctx.strokeStyle= "#000";
     ctx.beginPath();
@@ -16,7 +15,6 @@ export const renderWall = (ctx, delta, wall) => {
 /**
  *
  * @param ctx
- * @param {Number} delta
  * @param {Wall[]} walls
  */
-export const renderWalls = (ctx, delta, walls) => walls.map(renderWall.bind(this, ctx, delta));
+export const renderWalls = (ctx, walls) => walls.map(renderWall.bind(this, ctx));

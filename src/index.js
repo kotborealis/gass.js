@@ -12,8 +12,6 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
-let world = generateWorld(width, height, 150);
-
 const moveWall = {
     left: false,
     right: false
@@ -38,32 +36,41 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-const render = (canvas, world, delta) => {
+const world = {
+    current: generateWorld(width, height, 100)
+};
+
+const render = (canvas, world) => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    renderWorld(ctx, delta, world);
+    renderWorld(ctx, world.current);
+    requestAnimationFrame(render.bind(this, canvas, world));
 };
+
+render(canvas, world);
 
 const update = (delta = 1/60) => {
     const timeStart = Date.now();
 
+    const walls = world.current.walls;
+
     if(moveWall.left)
-        world.walls[1] = new Wall(world.walls[1].a, world.walls[1].b, new Vector(-100, 0));
+        walls[1] = new Wall(walls[1].a, walls[1].b, new Vector(-100, 0));
     else if(moveWall.right)
-        world.walls[1] = new Wall(world.walls[1].a, world.walls[1].b, new Vector(100, 0));
+        walls[1] = new Wall(walls[1].a, walls[1].b, new Vector(100, 0));
     else
-        world.walls[1] = new Wall(world.walls[1].a, world.walls[1].b, Vector.zero());
+        walls[1] = new Wall(walls[1].a, walls[1].b, Vector.zero());
 
-    render(canvas, world, delta);
-    world = runPhysics(delta, world);
-
-    const timeEnd = Date.now();
-    const deltaActual = timeEnd - timeStart;
-
-    if(deltaActual >= delta)
-        requestAnimationFrame(update.bind(this, delta));
-    else
-        setTimeout(update.bind(this, delta), delta * 1000);
+    console.log("RUN PHYS");
+    runPhysics(delta, world.current, (world_) => {
+        world.current = world_;
+        const timeEnd = Date.now();
+        const deltaActual = timeEnd - timeStart;
+        if(deltaActual >= delta)
+            requestAnimationFrame(update.bind(this, delta));
+        else
+            setTimeout(update.bind(this, delta), delta * 1000);
+    });
 };
 
 update();
