@@ -7,7 +7,9 @@
  * @param {Number} delta
  * @returns {Vector|null}
  */
-function lineIntersection (a1, a2, b1, b2, delta = 0.001) {
+import {Vector} from './Vector';
+
+export function lineIntersection (a1, a2, b1, b2, delta = 0.001) {
     const {x: x1, y: y1} = a1;
     const {x: x2, y: y2} = a2;
     const {x: x3, y: y3} = b1;
@@ -40,7 +42,7 @@ function lineIntersection (a1, a2, b1, b2, delta = 0.001) {
  * @param {Vector} point
  * @returns {Vector}
  */
-function closestPointOnLine(a, b, point) {
+export function closestPointOnLine(a, b, point) {
     const {x: lx1, y: ly1} = a;
     const {x: lx2, y: ly2} = b;
     const {x: x0, y: y0} = point;
@@ -69,7 +71,7 @@ function closestPointOnLine(a, b, point) {
  * @param {Vector} point
  * @return {Boolean}
  */
-function isPointOnLine(a, b, point){
+export function isPointOnLine(a, b, point){
     const dxc = point.x - a.x;
     const dyc = point.y - a.y;
 

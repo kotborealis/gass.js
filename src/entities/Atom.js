@@ -1,4 +1,4 @@
-class Atom {
+export class Atom {
     /** @type {Vector} **/
     position;
 
@@ -16,13 +16,15 @@ class Atom {
     }
 }
 
+export const atomRadius = 10;
+
 /**
  *
  * @param {Number} delta
  * @param {Atom} atom
  * @returns {Atom}
  */
-const integrateAtom = (delta, atom) =>
+export const integrateAtom = (delta, atom) =>
     new Atom(atom.position.add(atom.velocity.multiplyScalar(delta)), atom.velocity);
 
 /**
@@ -31,5 +33,5 @@ const integrateAtom = (delta, atom) =>
  * @param {Atom[]} atoms
  * @returns {Atom[]}
  */
-const integrateAtoms = (delta, atoms) =>
+export const integrateAtoms = (delta, atoms) =>
     atoms.map(atom => integrateAtom(delta, atom));

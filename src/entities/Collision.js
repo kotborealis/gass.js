@@ -1,4 +1,8 @@
-class Collision {
+import {closestPointOnLine, lineIntersection} from '../vector/VectorUtils';
+import {Atom, atomRadius, integrateAtom} from './Atom';
+import {integrateWall} from './Wall';
+
+export class Collision {
     /** @type {Atom|Wall} **/
     a;
 
@@ -31,7 +35,7 @@ class Collision {
  * @param {Collision[]} collisions
  * @returns {Collision}
  */
-const minCollision = (collisions = []) =>
+export const minCollision = (collisions = []) =>
     collisions.reduce((min, current) => current.time < min.time ? current : min);
 
 /**
@@ -39,7 +43,7 @@ const minCollision = (collisions = []) =>
  * @param {Collision} collision
  * @returns {Atom[]}
  */
-const collisionAtoms = (collision) => [
+export const collisionAtoms = (collision) => [
     collision.a instanceof Atom ? collision.a : null,
     collision.b instanceof Atom ? collision.b : null
 ].filter(id => id);
@@ -51,7 +55,7 @@ const collisionAtoms = (collision) => [
  * @param {Atom} rh
  * @returns {Collision|null}
  */
-const collideAtomAtom = (delta, lh, rh) => {
+export const collideAtomAtom = (delta, lh, rh) => {
     const move = lh.velocity.sub(rh.velocity).multiplyScalar(delta);
     const dist = lh.position.distance(rh.position) - atomRadius * 2;
 
@@ -90,7 +94,7 @@ const collideAtomAtom = (delta, lh, rh) => {
  * @param {Wall} wall
  * @returns {Collision|null}
  */
-const collideAtomWall = (delta, atom, wall) => {
+export const collideAtomWall = (delta, atom, wall) => {
     const ctx = canvas.getContext('2d');
 
     const move = atom.velocity.sub(wall.velocity).multiplyScalar(delta);
@@ -139,7 +143,7 @@ const collideAtomWall = (delta, atom, wall) => {
  * @param {Collision} collision
  * @returns {Atom[]}
  */
-const resolveCollision = (collision) => {
+export const resolveCollision = (collision) => {
     if(collisionAtoms(collision).length === 2){
         const delta = collision.time;
         const a = integrateAtom(delta, collision.a);

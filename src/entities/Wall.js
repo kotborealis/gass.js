@@ -1,4 +1,6 @@
-class Wall {
+import {Vector} from '../vector/Vector';
+
+export class Wall {
     /** @type {Vector} **/
     a;
 
@@ -27,7 +29,7 @@ class Wall {
  * @param {Wall} wall
  * @returns {Wall}
  */
-const integrateWall = (delta, wall) =>
+export const integrateWall = (delta, wall) =>
     new Wall(
         wall.a.add(wall.velocity.multiplyScalar(delta)),
         wall.b.add(wall.velocity.multiplyScalar(delta)),
@@ -40,5 +42,5 @@ const integrateWall = (delta, wall) =>
  * @param {Wall[]} walls
  * @returns {Wall[]}
  */
-const integrateWalls = (delta, walls) =>
+export const integrateWalls = (delta, walls) =>
     walls.map(wall => integrateWall(delta, wall));

@@ -1,4 +1,11 @@
+import {Vector} from './vector/Vector';
+import {Atom, atomRadius} from './entities/Atom';
+import {Wall} from './entities/Wall';
+import {runPhysics, World} from './entities/World';
+import {renderWorld} from './render/world';
+
 const canvas = document.querySelector('canvas');
+window.canvas = canvas;
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -11,7 +18,6 @@ const initialBounds = [
     new Vector(width - 100, height - 100)
 ];
 
-const atomRadius = 10;
 const atomsCountX = 10;
 const atomsCountY = 10;
 

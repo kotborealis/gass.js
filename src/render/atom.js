@@ -4,7 +4,9 @@
  * @param {Number} delta
  * @param {Atom} atom
  */
-const renderAtom = (ctx, delta, atom) => {
+import {atomRadius} from '../entities/Atom';
+
+export const renderAtom = (ctx, delta, atom) => {
     ctx.fillStyle = "#f0f0f0";
     ctx.lineWidth = 2;
     ctx.strokeStyle= "#0f0f0f";
@@ -31,4 +33,4 @@ const renderAtom = (ctx, delta, atom) => {
  * @param {Number} delta
  * @param {Atom[]} atoms
  */
-const renderAtoms = (ctx, delta, atoms) => atoms.map(renderAtom.bind(this, ctx, delta));
+export const renderAtoms = (ctx, delta, atoms) => atoms.map(renderAtom.bind(this, ctx, delta));

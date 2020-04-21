@@ -1,6 +1,8 @@
+import {integrateAtoms} from './Atom';
+import {integrateWalls} from './Wall';
+import {collideAtomAtom, collideAtomWall, collisionAtoms, minCollision, resolveCollision} from './Collision';
 
-
-class World {
+export class World {
     /** @type {Atom[]} **/
     atoms;
 
@@ -24,7 +26,7 @@ class World {
  * @param {World} world
  * @returns {World}
  */
-const runPhysics = (delta, world) => {
+export const runPhysics = (delta, world) => {
     if(delta === 0) {
         return world
     }
