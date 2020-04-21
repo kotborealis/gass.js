@@ -20,3 +20,25 @@ class Wall {
         this.velocity = velocity.copy();
     }
 }
+
+/**
+ *
+ * @param {Number} delta
+ * @param {Wall} wall
+ * @returns {Wall}
+ */
+const integrateWall = (delta, wall) =>
+    new Wall(
+        wall.a.add(wall.velocity.multiplyScalar(delta)),
+        wall.b.add(wall.velocity.multiplyScalar(delta)),
+        wall.velocity
+    );
+
+/**
+ *
+ * @param {Number} delta
+ * @param {Wall[]} walls
+ * @returns {Wall[]}
+ */
+const integrateWalls = (delta, walls) =>
+    walls.map(wall => integrateWall(delta, wall));

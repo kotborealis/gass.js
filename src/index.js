@@ -37,6 +37,7 @@ const walls = (bounds = initialBounds) => [
     new Wall(
         new Vector(bounds[1].x, bounds[0].y),
         new Vector(bounds[1].x, bounds[1].y),
+        //new Vector(-100, 0)
     ),
     new Wall(
         new Vector(bounds[1].x, bounds[1].y),
@@ -63,10 +64,10 @@ const render = (canvas, world, delta) => {
         ctx.fill();
         ctx.stroke();
 
-        if(atom.position.y > 1352) {
-            console.log(atom);
-            throw new Error;
-        }
+        //if(atom.position.y > 1352) {
+        //    console.log(atom);
+        //    throw new Error;
+        //}
 
         const move = atom.velocity.multiplyScalar(delta);
         const m1 = atom.position.add(move.normalize().multiplyScalar(atomRadius));

@@ -18,12 +18,6 @@ class World {
     }
 }
 
-
-
-
-
-
-
 /**
  *
  * @param {Number} delta
@@ -50,7 +44,7 @@ const runPhysics = (delta, world) => {
     if(!collisions.length) {
         return new World(
             integrateAtoms(delta, world.atoms),
-            world.walls
+            integrateWalls(delta, world.walls)
         );
     }
 
@@ -60,7 +54,7 @@ const runPhysics = (delta, world) => {
     if(tFirst > delta) {
         return new World(
             integrateAtoms(delta, world.atoms),
-            world.walls
+            integrateWalls(delta, world.walls)
         );
     }
 
@@ -73,6 +67,6 @@ const runPhysics = (delta, world) => {
             ...integrateAtoms(tFirst, nonCollidingAtoms),
             ...resolveCollision(firstCollision)
         ],
-        world.walls
+        integrateWalls(tFirst, world.walls)
     ));
 };

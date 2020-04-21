@@ -181,8 +181,9 @@ const resolveCollision = (collision) => {
     if(collisionAtoms(collision).length === 1){
         const delta = collision.time;
         const a = integrateAtom(delta, collision.a);
+        const b = integrateWall(delta, collision.b);
 
-        a.velocity = collision.normal.multiplyScalar(a.velocity.length());
+        a.velocity = collision.normal.multiplyScalar(a.velocity.add(b.velocity).length());
 
         return [a];
     }
