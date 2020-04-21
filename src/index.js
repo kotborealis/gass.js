@@ -15,9 +15,7 @@ const atomRadius = 10;
 const atomsCountX = 10;
 const atomsCountY = 10;
 
-const atoms = [
-
-];
+const atoms = [];
 
 for(let i = 0; i < atomsCountX; i++)
     for(let j = 0; j < atomsCountY; j++)
@@ -54,35 +52,7 @@ const render = (canvas, world, delta) => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    world.atoms.forEach(atom => {
-        ctx.fillStyle = "#f0f0f0";
-        ctx.lineWidth = 2;
-        ctx.strokeStyle= "#0f0f0f";
-        ctx.beginPath();
-        ctx.arc(...[...atom.position.coords(), atomRadius, 0, 2 * Math.PI, false]);
-        ctx.fill();
-        ctx.stroke();
-
-        const move = atom.velocity.multiplyScalar(delta);
-        const m1 = atom.position;
-        const m2 = m1.add(move);
-
-        ctx.lineWidth = 1;
-        ctx.strokeStyle= "#f00";
-        ctx.beginPath();
-        ctx.moveTo(...m1.coords());
-        ctx.lineTo(...m2.coords());
-        ctx.stroke();
-    });
-
-    world.walls.forEach(wall => {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle= "#000";
-        ctx.beginPath();
-        ctx.moveTo(...wall.a.coords());
-        ctx.lineTo(...wall.b.coords());
-        ctx.stroke();
-    });
+    renderWorld(ctx, delta, world);
 };
 
 let lastTime = Date.now();
