@@ -61,7 +61,6 @@ const update = (delta = 1/60) => {
     else
         walls[1] = new Wall(walls[1].a, walls[1].b, Vector.zero());
 
-    console.log("RUN PHYS");
     runPhysics(delta, world.current, (world_) => {
         world.current = world_;
         const timeEnd = Date.now();
