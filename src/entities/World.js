@@ -1,6 +1,7 @@
-import {integrateAtoms} from './Atom';
-import {integrateWalls} from './Wall';
+import {Atom, atomRadius, integrateAtoms} from './Atom';
+import {integrateWalls, Wall} from './Wall';
 import {collideAtomAtom, collideAtomWall, collisionAtoms, minCollision, resolveCollision} from './Collision';
+import {Vector} from '../vector/Vector';
 
 export class World {
     /** @type {Atom[]} **/
@@ -71,4 +72,51 @@ export const runPhysics = (delta, world) => {
         ],
         integrateWalls(tFirst, world.walls)
     ));
+};
+
+/**
+ *
+ * @param {Number} width
+ * @param {Number} height
+ * @param {Number} atomsCount
+ */
+export const generateWorld = (width, height, atomsCount) => {
+    const initialBounds = [
+        new Vector(100, 100),
+        new Vector(width - 100, height - 100)
+    ];
+
+
+    const atoms = Array.from(
+        {length: atomsCount},
+        () => new Atom(
+            Vector.random(
+                initialBounds[0].x + atomRadius,
+                initialBounds[1].x - atomRadius,
+                initialBounds[0].y + atomRadius,
+                initialBounds[1].y - atomRadius),
+            Vector.random(-100, 100, -100, 100)
+        )
+    );
+
+    const walls = [
+        new Wall(
+            new Vector(initialBounds[0].x, initialBounds[0].y),
+            new Vector(initialBounds[1].x, initialBounds[0].y),
+        ),
+        new Wall(
+            new Vector(initialBounds[1].x, initialBounds[0].y),
+            new Vector(initialBounds[1].x, initialBounds[1].y),
+        ),
+        new Wall(
+            new Vector(initialBounds[1].x, initialBounds[1].y),
+            new Vector(initialBounds[0].x, initialBounds[1].y),
+        ),
+        new Wall(
+            new Vector(initialBounds[0].x, initialBounds[1].y),
+            new Vector(initialBounds[0].x, initialBounds[0].y),
+        ),
+    ];
+
+    return new World(atoms, walls);
 };

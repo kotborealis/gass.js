@@ -172,8 +172,6 @@ export const resolveCollision = (collision) => {
         const next = collision.normal.multiplyScalar(a.velocity.add(b.velocity).length());
         const closest = closestPointOnLine(b.a, b.b, a.position);
 
-        console.log("SAS", collision, a.position.distance(closest), a.position.add(next).distance(closest));
-
         if(
             a.position.distance(closest)
             >
