@@ -10,9 +10,52 @@
             height: 100vh;
             position: fixed;
         }
+
+        .integral-params {
+            width: 300px;
+            position: fixed;
+            right: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 20px;
+            font-family: monospace;
+        }
+
+        .integral-params table {
+            color: white;
+        }
+        .integral-params table td {
+            color: white;
+            text-align: right;
+            padding: 0 10px;
+        }
+        .integral-params table td.value {
+            color: white;
+            text-align: left;
+        }
     </style>
     <body>
         <canvas></canvas>
+        <div class="integral-params">
+            <b>Интегральные характеристики</b>
+            <table>
+                <tbody>
+                    <tr class="volume">
+                        <td>Объём:</td>
+                        <td class="value"></td>
+                    </tr>
+                    <tr class="temperature">
+                        <td>Температура:</td>
+                        <td class="value"></td>
+                    </tr>
+                    <tr class="pressure">
+                        <td>Давление:</td>
+                        <td class="value"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </body>
     <script src="./bundle.js"></script>
 </html>
