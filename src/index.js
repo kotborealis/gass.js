@@ -2,12 +2,12 @@ import {generateWorld, runPhysics} from './entities/World';
 import {renderWorld} from './render/renderWorld';
 import {Wall} from './entities/Wall';
 import {Vector} from './vector/Vector';
+import {Chart} from './render/Chart';
 
 const canvas = document.querySelector('canvas');
 window.canvas = canvas;
 
-const width = window.innerWidth;
-const height = window.innerHeight;
+const {width, height} = document.querySelector('.simulation').getBoundingClientRect();
 
 canvas.width = width;
 canvas.height = height;
@@ -40,6 +40,23 @@ const world = {
     current: generateWorld(width, height, 100)
 };
 
+const integralParamsHistory = {
+    /** @type {Number[]} **/
+    pressures: [],
+
+    /** @type {Number[]} **/
+    volumes: [],
+
+    /** @type {Number[]} **/
+    temperatures: [],
+};
+
+const charts = {
+    pressure_volume: Chart('.pressure-volume-chart canvas'),
+    pressure_temperature: Chart('.pressure-temperature-chart canvas'),
+    volume_temperature: Chart('.volume-temperature-chart canvas')
+};
+
 const render = (canvas, world) => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -63,6 +80,17 @@ const updateIntegralParams = (container, world) => {
 
     const temperature = Ek_m / (3/2) / (1.38 * 10e-23);
     container.querySelector('.temperature > .value').innerHTML = temperature.toString();
+
+    integralParamsHistory.volumes = [...integralParamsHistory.volumes.slice(-200), volume];
+    integralParamsHistory.temperatures = [...integralParamsHistory.temperatures.slice(-200), temperature];
+    integralParamsHistory.pressures = [...integralParamsHistory.pressures.slice(-200), pressure];
+
+    const {pressures, temperatures, volumes} = integralParamsHistory;
+    const {pressure_volume, pressure_temperature, volume_temperature} = charts;
+
+    pressure_volume(pressures, volumes);
+    pressure_temperature(temperatures, pressures);
+    volume_temperature(temperatures, volumes);
 
     setTimeout(updateIntegralParams.bind(this, container, world), 500);
 }

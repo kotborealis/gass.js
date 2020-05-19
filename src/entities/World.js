@@ -83,8 +83,8 @@ export const runPhysics = (delta, world, resolve) => setTimeout(() => {
  */
 export const generateWorld = (width, height, atomsCount) => {
     const initialBounds = [
-        new Vector(100, 100),
-        new Vector(width - 100, height - 100)
+        new Vector(10, 10),
+        new Vector(width - 10, height - 10)
     ];
 
 

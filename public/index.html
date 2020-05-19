@@ -1,61 +1,94 @@
 <html>
-    <head>
-        <title>GasS</title>
-    </head>
-    <style>
-        * { margin: 0; padding: 0; }
-        body { background: #fcb215; }
-        canvas {
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-        }
+<head>
+    <title>GasS</title>
+</head>
+<style>
+    body {
+        background: #cecece;
+    }
 
-        .integral-params {
-            width: 300px;
-            position: fixed;
-            right: 0;
-            top: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 10px 20px;
-            font-family: monospace;
-        }
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
 
-        .integral-params table {
-            color: white;
-        }
-        .integral-params table td {
-            color: white;
-            text-align: right;
-            padding: 0 10px;
-        }
-        .integral-params table td.value {
-            color: white;
-            text-align: left;
-        }
-    </style>
-    <body>
+    .integral-params {
+        color: black;
+        font-family: monospace;
+    }
+
+    .integral-params table td {
+        text-align: right;
+        padding: 0 10px;
+    }
+
+    .integral-params table td.value {
+        text-align: left;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
+
+    .simulation {
+        flex: 1;
+    }
+
+    .simulation-info {
+        width: 500px;
+    }
+
+    .chart td canvas{
+        width: 100%;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="simulation">
         <canvas></canvas>
+    </div>
+    <div class="simulation-info">
         <div class="integral-params">
             <b>Интегральные характеристики</b>
             <table>
                 <tbody>
-                    <tr class="volume">
-                        <td>Объём:</td>
-                        <td class="value"></td>
-                    </tr>
-                    <tr class="temperature">
-                        <td>Температура:</td>
-                        <td class="value"></td>
-                    </tr>
-                    <tr class="pressure">
-                        <td>Давление:</td>
-                        <td class="value"></td>
-                    </tr>
+                <tr class="volume">
+                    <td>Объём:</td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="temperature">
+                    <td>Температура:</td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="pressure">
+                    <td>Давление:</td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="pressure-volume-chart chart">
+                    <td colspan="4">
+                        &#x2191; Давление &#x2192; Объём
+                        <canvas></canvas>
+                    </td>
+                </tr>
+                <tr class="pressure-temperature-chart chart">
+                    <td colspan="4">
+                        &#x2191; Давление &#x2192; температура
+                        <canvas></canvas>
+                    </td>
+                </tr>
+                <tr class="volume-temperature-chart chart">
+                    <td colspan="4">
+                        &#x2191; Объём &#x2192; температура
+                        <canvas></canvas>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
-    </body>
-    <script src="./bundle.js"></script>
+    </div>
+</div>
+</body>
+<script src="./bundle.js"></script>
 </html>
