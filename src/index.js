@@ -88,7 +88,7 @@ const updateIntegralParams = (container, world) => {
     const {pressures, temperatures, volumes} = integralParamsHistory;
     const {pressure_volume, pressure_temperature, volume_temperature} = charts;
 
-    pressure_volume(pressures, volumes);
+    pressure_volume(volumes, pressures);
     pressure_temperature(temperatures, pressures);
     volume_temperature(temperatures, volumes);
 
