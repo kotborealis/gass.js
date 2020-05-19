@@ -1,5 +1,4 @@
 import {svgGrid} from './svgGrid';
-import {Vector} from '../vector/Vector';
 
 /**
  *
@@ -8,7 +7,7 @@ import {Vector} from '../vector/Vector';
  * @returns {function(...[*]=)}
  * @constructor
  */
-export const Chart = (selector, color="#013d3d") => {
+export const Chart = (selector, color = "#013d3d") => {
     const canvas = document.querySelector(selector);
 
     let data_x = [], data_y = [];
@@ -23,16 +22,18 @@ export const Chart = (selector, color="#013d3d") => {
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
-        const x = convertRange(data_x[0], bounds(data_x), [0, canvas.width]);
-        const y = canvas.height - convertRange(data_y[0], bounds(data_y), [0, canvas.height]);
-        ctx.moveTo(x, y);
-        for(let i = 1; i < data_x.length; i++) {
-            const x = convertRange(data_x[i], bounds(data_x), [0, canvas.width]);
-            const y = canvas.height - convertRange(data_y[i], bounds(data_y), [0, canvas.height]);
-            ctx.lineTo(x, y);
+        ctx.moveTo(...coordsToCanvas(canvas)(data_x, data_y, data_x[0], data_y[0]));
+        for(let i = 1; i < data_x.length; i++){
+            ctx.lineTo(...coordsToCanvas(canvas)(data_x, data_y, data_x[i], data_y[i]));
         }
         ctx.stroke();
-    }, 500);
+
+        ctx.fillStyle = "#009332";
+        ctx.beginPath();
+        ctx.arc(...coordsToCanvas(canvas)(data_x, data_y, data_x[data_x.length - 1], data_y[data_y.length - 1]), 5, 0, 2 * Math.PI, false);
+        ctx.fill();
+
+    }, 50);
 
     return (_data_x, _data_y) => {
         data_x = _data_x;
@@ -40,8 +41,13 @@ export const Chart = (selector, color="#013d3d") => {
     };
 };
 
+const coordsToCanvas = (canvas) => (data_x, data_y, x, y) => [
+    convertRange(x, bounds(data_x), [0, canvas.width]),
+    canvas.height - convertRange(y, bounds(data_y), [0, canvas.height]),
+];
+
 const bounds = data => [Math.min(...data), Math.max(...data)];
 
-function convertRange( value, r1, r2 ) {
-    return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
+function convertRange(value, r1, r2) {
+    return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
 }
