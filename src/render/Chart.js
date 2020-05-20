@@ -33,7 +33,7 @@ export const Chart = (selector, color = "#013d3d") => {
         ctx.arc(...coordsToCanvas(canvas)(data_x, data_y, data_x[data_x.length - 1], data_y[data_y.length - 1]), 5, 0, 2 * Math.PI, false);
         ctx.fill();
 
-    }, 50);
+    }, 20);
 
     return (_data_x, _data_y) => {
         data_x = _data_x;

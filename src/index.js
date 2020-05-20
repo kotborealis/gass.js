@@ -92,7 +92,7 @@ const updateIntegralParams = (container, world) => {
     pressure_temperature(temperatures, pressures);
     volume_temperature(temperatures, volumes);
 
-    setTimeout(updateIntegralParams.bind(this, container, world), 50);
+    setTimeout(updateIntegralParams.bind(this, container, world), 20);
 }
 
 updateIntegralParams(document.querySelector('.integral-params'), world);
